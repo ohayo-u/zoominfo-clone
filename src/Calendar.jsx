@@ -1,7 +1,13 @@
-export function Calendar() {
+export function Calendar({ cliant, setSideAreaContent }) {
   return (
-    <div className="calendar">
-      <p>カレンダー</p>
+    <div className="side-area">
+      <div className="calendar">
+        <button onClick={() => setSideAreaContent(null)}>
+          <i class="fa-solid fa-xmark fa-lg"></i>
+        </button>
+        <p>calendar</p>
+        <p>{cliant.name} - time block</p>
+      </div>
     </div>
   );
 }

@@ -1,0 +1,71 @@
+main {
+  display: flex;
+}
+button {
+  cursor: pointer;
+  border: none;
+  background-color: white;
+}
+
+// message
+.chat-container {
+  height: 800px;
+  width: 750px;
+  margin: 0 auto;
+  form {
+    width: 100%;
+    text-align: center;
+    margin-top: 20px;
+  }
+  input {
+    width: 650px;
+  }
+}
+.message {
+  display: flex;
+}
+.avatar-image {
+  width: 40px;
+  height: 40px;
+  margin: 20px;
+}
+.name {
+  color: blue;
+  cursor: pointer;
+}
+.option-buttons {
+  margin-left: 70px;
+  button {
+    border: 1px solid skyblue;
+    color: skyblue;
+    padding: 5px;
+    border-radius: 10px;
+    margin: 5px;
+  }
+}
+
+// side
+.side-area {
+  height: 800px;
+  width: 400px;
+  margin-left: 0px;
+}
+.side-area-header {
+  display: flex;
+  justify-content: space-between;
+}
+
+//email
+.addressee {
+  font-weight: normal;
+  font-size: 16px;
+  border: 1px solid;
+  padding: 5px;
+  border-radius: 10px;
+}
+.email {
+  h3 {
+    border-bottom: 1px solid;
+    padding-bottom: 10px;
+  }
+}
