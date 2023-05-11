@@ -5,7 +5,7 @@ export function OverView({ cliant, setSideAreaContent }) {
         <div className="side-area-header">
           <h2>Overview</h2>
           <button onClick={() => setSideAreaContent(null)}>
-            <i class="fa-solid fa-xmark fa-lg"></i>
+            <i className="fa-solid fa-xmark fa-lg"></i>
           </button>
         </div>
 

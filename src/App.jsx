@@ -1,29 +1,53 @@
 import "./App.scss";
+import Button from "@mui/material/Button";
 import { useState } from "react";
 import { Calendar } from "./Calendar";
 import { Email } from "./Email";
 import { OverView } from "./OverView";
 import { Message } from "./Message";
+import { Paragraph } from "./Paragraph";
+import { OptionButton } from "./OptionButton";
+import InputAdornment from "@mui/material/InputAdornment";
+
+import { Paper, TextField, ButtonGroup, IconButton, Grid } from "@mui/material";
+import { createTheme, ThemeProvider } from "@mui/material/styles";
+import SendIcon from "@mui/icons-material/Send";
 
 function App() {
+  const theme = createTheme({
+    components: {
+      MuiButton: {
+        styleOverrides: {
+          root: {
+            textTransform: "none",
+          },
+        },
+      },
+    },
+    palette: {
+      primary: {
+        main: "#0a4cee",
+      },
+      background: {
+        message: "#f5f6fb",
+      },
+    },
+  });
+
   const [optionButtonsAreOpen, setOptionButtonsAreOpen] = useState(true);
   const [messages, setMessages] = useState([
     {
       id: 1,
       sender: "user",
-      content: (
-        <div>
-          <p>Optimize my day</p>
-        </div>
-      ),
+      content: <Paragraph>Optimize my day</Paragraph>,
     },
     {
       id: 2,
       sender: "zoominfo",
       content: (
-        <div>
-          <p>Good morning!Based on your calendar...</p>
-        </div>
+        <Paragraph sx={{ bgcolor: theme.palette.background.message }}>
+          Good morning!Based on your calendar...
+        </Paragraph>
       ),
     },
   ]);
@@ -86,11 +110,7 @@ function App() {
   const newUserMessage = {
     id: 3,
     sender: "user",
-    content: (
-      <div>
-        <p>Show me top 3 contacts</p>
-      </div>
-    ),
+    content: <Paragraph elevation={0}>Show me top 3 contacts</Paragraph>,
   };
 
   const newZoominfoMessage = {
@@ -101,10 +121,16 @@ function App() {
         {recomendedContacts.map((contact) => {
           const cliantProfile = contact.cliant;
           return (
-            <div className="message-content" key={cliantProfile.id}>
+            <Paragraph
+              sx={{ backgroundColor: theme.palette.background.message }}
+              key={cliantProfile.id}
+            >
               <p>
                 <span
-                  className="name"
+                  style={{
+                    color: theme.palette.primary.main,
+                    cursor: "pointer",
+                  }}
                   onClick={() => nameClick(cliantProfile.id)}
                 >
                   {cliantProfile.name}
@@ -112,22 +138,22 @@ function App() {
                 ,{cliantProfile.position}
               </p>
               <p>{contact.explanation}</p>
-              {contact.contactOptions.map((option) => {
-                let onClickEvent;
-                if (option.kind === "send-a-email") {
-                  onClickEvent = () => emailClick(cliantProfile.id);
-                } else if (option.kind === "block-time") {
-                  onClickEvent = () => calendarClick(cliantProfile.id);
-                } else {
-                  null;
-                }
-                return (
-                  <button className="option-button" onClick={onClickEvent}>
-                    {option.content}
-                  </button>
-                );
-              })}
-            </div>
+              <ButtonGroup variant="text" aria-label="text button group">
+                {contact.contactOptions.map((option) => {
+                  let onClickEvent;
+                  if (option.kind === "send-a-email") {
+                    onClickEvent = () => emailClick(cliantProfile.id);
+                  } else if (option.kind === "block-time") {
+                    onClickEvent = () => calendarClick(cliantProfile.id);
+                  } else {
+                    null;
+                  }
+                  return (
+                    <Button onClick={onClickEvent}>{option.content}</Button>
+                  );
+                })}
+              </ButtonGroup>
+            </Paragraph>
           );
         })}
       </div>
@@ -179,29 +205,60 @@ function App() {
 
   return (
     <main>
-      <div className="chat-container">
-        <div className="message-list">
-          {messages.map((message) => {
-            return <Message key={message.id} message={message} />;
-          })}
-        </div>
-        {optionButtonsAreOpen ? (
-          <div className="option-buttons">
-            <button onClick={() => optionClick()}>
-              Show me top 3 contacts
-            </button>
-            <button>Block time to follow-up</button>
-            <button>Help me prospect</button>
-          </div>
-        ) : null}
-        <form>
-          <input></input>
-          <button>
-            <i className="fa-solid fa-paper-plane"></i>
-          </button>
-        </form>
-      </div>
-      {sideArea}
+      <ThemeProvider theme={theme}>
+        <Paper
+          elevation={3}
+          sx={{
+            width: "1400px",
+            height: "650px",
+            overflow: "auto",
+            m: "0 auto",
+            pb: "100px",
+          }}
+        >
+          <Grid container alignItems="center" justify="center">
+            <Grid item xs={8}>
+              {messages.map((message) => {
+                return (
+                  <Message
+                    key={message.id}
+                    message={message}
+                    messages={messages}
+                  />
+                );
+              })}
+              {optionButtonsAreOpen ? (
+                <div style={{ marginLeft: "90px" }}>
+                  <OptionButton onClick={() => optionClick()}>
+                    Show me top 3 contacts
+                  </OptionButton>
+                  <OptionButton>Block time to follow-up</OptionButton>
+                  <OptionButton>Help me prospect</OptionButton>
+                </div>
+              ) : null}
+              <form>
+                <TextField
+                  fullWidth
+                  margin="normal"
+                  InputProps={{
+                    endAdornment: (
+                      <InputAdornment position="end">
+                        <IconButton>
+                          <SendIcon />
+                        </IconButton>
+                      </InputAdornment>
+                    ),
+                  }}
+                  sx={{ height: "2px" }}
+                />
+              </form>
+            </Grid>
+            <Grid item xs={4}>
+              {sideArea}
+            </Grid>
+          </Grid>
+        </Paper>
+      </ThemeProvider>
     </main>
   );
 }

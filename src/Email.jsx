@@ -5,7 +5,7 @@ export function Email({ cliant, setSideAreaContent }) {
         <div className="side-area-header">
           <h2>Email</h2>
           <button onClick={() => setSideAreaContent(null)}>
-            <i class="fa-solid fa-xmark fa-lg"></i>
+            <i className="fa-solid fa-xmark fa-lg"></i>
           </button>
         </div>
         <h3>Template</h3>
