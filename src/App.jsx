@@ -1,5 +1,3 @@
-import "./App.scss";
-import Button from "@mui/material/Button";
 import { useState } from "react";
 import { Calendar } from "./Calendar";
 import { Email } from "./Email";
@@ -7,9 +5,18 @@ import { OverView } from "./OverView";
 import { Message } from "./Message";
 import { Paragraph } from "./Paragraph";
 import { OptionButton } from "./OptionButton";
+import { Header } from "./Header";
+import Button from "@mui/material/Button";
 import InputAdornment from "@mui/material/InputAdornment";
 
-import { Paper, TextField, ButtonGroup, IconButton, Grid } from "@mui/material";
+import {
+  Paper,
+  TextField,
+  ButtonGroup,
+  IconButton,
+  Container,
+  CssBaseline,
+} from "@mui/material";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import SendIcon from "@mui/icons-material/Send";
 
@@ -23,6 +30,17 @@ function App() {
           },
         },
       },
+      MuiDrawer: {
+        styleOverrides: {
+          paper: {
+            width: "350px",
+            padding: "10px 20px",
+          },
+        },
+      },
+    },
+    typography: {
+      fontFamily: ["Sharp Sans"].join(","),
     },
     palette: {
       primary: {
@@ -33,26 +51,30 @@ function App() {
       },
     },
   });
-
   const [optionButtonsAreOpen, setOptionButtonsAreOpen] = useState(true);
   const [messages, setMessages] = useState([
     {
       id: 1,
       sender: "user",
-      content: <Paragraph>Optimize my day</Paragraph>,
+      content: <Paragraph sender="user">Optimize my day</Paragraph>,
     },
     {
       id: 2,
       sender: "zoominfo",
       content: (
-        <Paragraph sx={{ bgcolor: theme.palette.background.message }}>
+        <Paragraph
+          sender="zoominfo"
+          sx={{ bgcolor: theme.palette.background.message }}
+        >
           Good morning!Based on your calendar...
         </Paragraph>
       ),
     },
   ]);
-  const [sideAreaContent, setSideAreaContent] = useState(null);
   const [cliant, setCliant] = useState();
+  const [isOverviewOpen, setIsOverviewOpen] = useState(false);
+  const [isEmailOpen, setIsEmailOpen] = useState(false);
+  const [isCalendarOpen, setIsCalendarOpen] = useState(false);
 
   const cliantProfiles = [
     {
@@ -110,7 +132,7 @@ function App() {
   const newUserMessage = {
     id: 3,
     sender: "user",
-    content: <Paragraph elevation={0}>Show me top 3 contacts</Paragraph>,
+    content: <Paragraph sender="user">Show me top 3 contacts</Paragraph>,
   };
 
   const newZoominfoMessage = {
@@ -122,6 +144,7 @@ function App() {
           const cliantProfile = contact.cliant;
           return (
             <Paragraph
+              sender="zoominfo"
               sx={{ backgroundColor: theme.palette.background.message }}
               key={cliantProfile.id}
             >
@@ -175,88 +198,87 @@ function App() {
 
   const nameClick = (id) => {
     findClickedCliant(id);
-    setSideAreaContent("overView");
+    setIsOverviewOpen(true);
   };
   const emailClick = (id) => {
     findClickedCliant(id);
-    setSideAreaContent("email");
+    setIsEmailOpen(true);
   };
   const calendarClick = (id) => {
     findClickedCliant(id);
-    setSideAreaContent("calendar");
+    setIsCalendarOpen(true);
   };
-
-  let sideArea;
-  if (sideAreaContent === "calendar") {
-    sideArea = (
-      <Calendar cliant={cliant} setSideAreaContent={setSideAreaContent} />
-    );
-  } else if (sideAreaContent === "email") {
-    sideArea = (
-      <Email cliant={cliant} setSideAreaContent={setSideAreaContent} />
-    );
-  } else if (sideAreaContent === "overView") {
-    sideArea = (
-      <OverView cliant={cliant} setSideAreaContent={setSideAreaContent} />
-    );
-  } else {
-    sideArea = null;
-  }
 
   return (
     <main>
       <ThemeProvider theme={theme}>
+        <CssBaseline />
+        <Header />
         <Paper
           elevation={3}
           sx={{
             width: "1400px",
-            height: "650px",
+            height: "700px",
             overflow: "auto",
-            m: "0 auto",
+            m: "10px auto",
             pb: "100px",
           }}
         >
-          <Grid container alignItems="center" justify="center">
-            <Grid item xs={8}>
-              {messages.map((message) => {
-                return (
-                  <Message
-                    key={message.id}
-                    message={message}
-                    messages={messages}
-                  />
-                );
-              })}
-              {optionButtonsAreOpen ? (
-                <div style={{ marginLeft: "90px" }}>
-                  <OptionButton onClick={() => optionClick()}>
-                    Show me top 3 contacts
-                  </OptionButton>
-                  <OptionButton>Block time to follow-up</OptionButton>
-                  <OptionButton>Help me prospect</OptionButton>
-                </div>
-              ) : null}
-              <form>
-                <TextField
-                  fullWidth
-                  margin="normal"
-                  InputProps={{
-                    endAdornment: (
-                      <InputAdornment position="end">
-                        <IconButton>
-                          <SendIcon />
-                        </IconButton>
-                      </InputAdornment>
-                    ),
-                  }}
-                  sx={{ height: "2px" }}
+          <Container maxWidth="md">
+            {messages.map((message) => {
+              return (
+                <Message
+                  key={message.id}
+                  message={message}
+                  messages={messages}
                 />
-              </form>
-            </Grid>
-            <Grid item xs={4}>
-              {sideArea}
-            </Grid>
-          </Grid>
+              );
+            })}
+            {optionButtonsAreOpen ? (
+              <div style={{ marginLeft: "90px" }}>
+                <OptionButton onClick={() => optionClick()}>
+                  Show me top 3 contacts
+                </OptionButton>
+                <OptionButton>Block time to follow-up</OptionButton>
+                <OptionButton>Help me prospect</OptionButton>
+              </div>
+            ) : null}
+            <form>
+              <TextField
+                fullWidth
+                margin="normal"
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <IconButton>
+                        <SendIcon />
+                      </IconButton>
+                    </InputAdornment>
+                  ),
+                }}
+                sx={{ height: "2px" }}
+              />
+            </form>
+          </Container>
+          {cliant ? (
+            <>
+              <OverView
+                isOverviewOpen={isOverviewOpen}
+                setIsOverviewOpen={setIsOverviewOpen}
+                cliant={cliant}
+              />
+              <Email
+                isEmailOpen={isEmailOpen}
+                setIsEmailOpen={setIsEmailOpen}
+                cliant={cliant}
+              />
+              <Calendar
+                isCalendarOpen={isCalendarOpen}
+                setIsCalendarOpen={setIsCalendarOpen}
+                cliant={cliant}
+              />
+            </>
+          ) : null}
         </Paper>
       </ThemeProvider>
     </main>

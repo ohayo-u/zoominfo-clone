@@ -1,20 +1,33 @@
-export function Email({ cliant, setSideAreaContent }) {
+import { Drawer, IconButton, Stack, Typography } from "@mui/material";
+import CloseIcon from "@mui/icons-material/Close";
+import AppsIcon from "@mui/icons-material/Apps";
+import MinimizeIcon from "@mui/icons-material/Minimize";
+
+export function Email({ isEmailOpen, setIsEmailOpen, cliant }) {
   return (
-    <div className="side-area">
+    <Drawer
+      anchor="right"
+      open={isEmailOpen}
+      onClose={() => setIsEmailOpen(false)}
+    >
       <div className="email">
-        <div className="side-area-header">
-          <h2>Email</h2>
-          <button onClick={() => setSideAreaContent(null)}>
-            <i className="fa-solid fa-xmark fa-lg"></i>
-          </button>
-        </div>
-        <h3>Template</h3>
-        <h3>From</h3>
-        <h3>
-          To <span className="addressee">{cliant.name}</span>
-        </h3>
-        <h3>Subject</h3>
+        <Stack direction="row" justifyContent="space-between">
+          <Typography variant="h6" sx={{ fontWeight: "bold" }}>
+            Email
+          </Typography>
+          <div>
+            <IconButton>
+              <MinimizeIcon />
+            </IconButton>
+            <IconButton>
+              <AppsIcon />
+            </IconButton>
+            <IconButton onClick={() => setIsEmailOpen(false)}>
+              <CloseIcon />
+            </IconButton>
+          </div>
+        </Stack>
       </div>
-    </div>
+    </Drawer>
   );
 }

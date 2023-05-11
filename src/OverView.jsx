@@ -1,10 +1,16 @@
-export function OverView({ cliant, setSideAreaContent }) {
+import { Drawer } from "@mui/material";
+
+export function OverView({ isOverviewOpen, setIsOverviewOpen, cliant }) {
   return (
-    <div className="side-area">
+    <Drawer
+      anchor="right"
+      open={isOverviewOpen}
+      onClose={() => setIsOverviewOpen(false)}
+    >
       <div className="overView">
         <div className="side-area-header">
           <h2>Overview</h2>
-          <button onClick={() => setSideAreaContent(null)}>
+          <button onClick={() => setIsOverviewOpen(false)}>
             <i className="fa-solid fa-xmark fa-lg"></i>
           </button>
         </div>
@@ -14,6 +20,6 @@ export function OverView({ cliant, setSideAreaContent }) {
         <p>Email addresses: {cliant.email}</p>
         <p>Phone numbers: {cliant.phoneNumber}</p>
       </div>
-    </div>
+    </Drawer>
   );
 }
