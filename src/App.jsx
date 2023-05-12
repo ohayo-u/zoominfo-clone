@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Calendar } from "./Calendar";
 import { Email } from "./Email";
 import { OverView } from "./OverView";
@@ -14,8 +14,9 @@ import {
   TextField,
   ButtonGroup,
   IconButton,
-  Container,
   CssBaseline,
+  Grid,
+  Stack,
 } from "@mui/material";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import SendIcon from "@mui/icons-material/Send";
@@ -30,17 +31,9 @@ function App() {
           },
         },
       },
-      MuiDrawer: {
-        styleOverrides: {
-          paper: {
-            width: "350px",
-            padding: "10px 20px",
-          },
-        },
-      },
     },
     typography: {
-      fontFamily: ["Sharp Sans"].join(","),
+      fontFamily: ["Sans Serif"].join(","),
     },
     palette: {
       primary: {
@@ -72,9 +65,7 @@ function App() {
     },
   ]);
   const [cliant, setCliant] = useState();
-  const [isOverviewOpen, setIsOverviewOpen] = useState(false);
-  const [isEmailOpen, setIsEmailOpen] = useState(false);
-  const [isCalendarOpen, setIsCalendarOpen] = useState(false);
+  const [sideAreaContent, setSideAreaContent] = useState(null);
 
   const cliantProfiles = [
     {
@@ -198,16 +189,42 @@ function App() {
 
   const nameClick = (id) => {
     findClickedCliant(id);
-    setIsOverviewOpen(true);
+    setSideAreaContent("overView");
   };
   const emailClick = (id) => {
     findClickedCliant(id);
-    setIsEmailOpen(true);
+    setSideAreaContent("email");
   };
   const calendarClick = (id) => {
     findClickedCliant(id);
-    setIsCalendarOpen(true);
+    setSideAreaContent("calendar");
   };
+
+  const ScrollToBottom = () => {
+    const element = document.getElementById("bottom");
+    if (element) {
+      element.scrollIntoView({ behavior: "smooth" });
+    }
+  };
+  let sideArea;
+  if (sideAreaContent === "calendar") {
+    sideArea = (
+      <Calendar cliant={cliant} setSideAreaContent={setSideAreaContent} />
+    );
+  } else if (sideAreaContent === "email") {
+    sideArea = (
+      <Email cliant={cliant} setSideAreaContent={setSideAreaContent} />
+    );
+  } else if (sideAreaContent === "overView") {
+    sideArea = (
+      <OverView cliant={cliant} setSideAreaContent={setSideAreaContent} />
+    );
+  } else {
+    sideArea = null;
+  }
+  useEffect(() => {
+    ScrollToBottom();
+  }, [messages.length]);
 
   return (
     <main>
@@ -219,34 +236,54 @@ function App() {
           sx={{
             width: "1400px",
             height: "700px",
-            overflow: "auto",
             m: "10px auto",
             pb: "100px",
+            position: "relative",
+            display: "flex",
+            justifyContent: "center",
           }}
         >
-          <Container maxWidth="md">
-            {messages.map((message) => {
-              return (
-                <Message
-                  key={message.id}
-                  message={message}
-                  messages={messages}
-                />
-              );
-            })}
-            {optionButtonsAreOpen ? (
-              <div style={{ marginLeft: "90px" }}>
-                <OptionButton onClick={() => optionClick()}>
-                  Show me top 3 contacts
-                </OptionButton>
-                <OptionButton>Block time to follow-up</OptionButton>
-                <OptionButton>Help me prospect</OptionButton>
-              </div>
-            ) : null}
-            <form>
+          <Grid container alignItems="center" justify="center">
+            <Grid
+              item
+              xs={sideArea ? 8 : 12}
+              sx={{
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+              }}
+            >
+              <Stack
+                sx={{
+                  width: "800px",
+                  overflow: "scroll",
+                  height: "550px",
+                }}
+              >
+                {messages.map((message) => {
+                  return (
+                    <Message
+                      key={message.id}
+                      message={message}
+                      messages={messages}
+                    />
+                  );
+                })}
+                {optionButtonsAreOpen ? (
+                  <div style={{ marginLeft: "90px" }}>
+                    <OptionButton onClick={() => optionClick()}>
+                      Show me top 3 contacts
+                    </OptionButton>
+                    <OptionButton>Block time to follow-up</OptionButton>
+                    <OptionButton>Help me prospect</OptionButton>
+                  </div>
+                ) : null}
+                <div id="bottom" />
+              </Stack>
               <TextField
                 fullWidth
                 margin="normal"
+                sx={{ width: "800px" }}
                 InputProps={{
                   endAdornment: (
                     <InputAdornment position="end">
@@ -256,29 +293,12 @@ function App() {
                     </InputAdornment>
                   ),
                 }}
-                sx={{ height: "2px" }}
               />
-            </form>
-          </Container>
-          {cliant ? (
-            <>
-              <OverView
-                isOverviewOpen={isOverviewOpen}
-                setIsOverviewOpen={setIsOverviewOpen}
-                cliant={cliant}
-              />
-              <Email
-                isEmailOpen={isEmailOpen}
-                setIsEmailOpen={setIsEmailOpen}
-                cliant={cliant}
-              />
-              <Calendar
-                isCalendarOpen={isCalendarOpen}
-                setIsCalendarOpen={setIsCalendarOpen}
-                cliant={cliant}
-              />
-            </>
-          ) : null}
+            </Grid>
+            <Grid item xs={sideArea ? 4 : 0}>
+              {sideArea}
+            </Grid>
+          </Grid>
         </Paper>
       </ThemeProvider>
     </main>

@@ -1,19 +1,13 @@
-import { Drawer } from "@mui/material";
+import { Paper } from "@mui/material";
 
-export function Calendar({ isCalendarOpen, setIsCalendarOpen, cliant }) {
+export function Calendar({ setSideAreaContent, cliant }) {
   return (
-    <Drawer
-      anchor="right"
-      open={isCalendarOpen}
-      onClose={() => setIsCalendarOpen(false)}
-    >
-      <>
-        <button onClick={() => setIsCalendarOpen(false)}>
-          <i className="fa-solid fa-xmark fa-lg"></i>
-        </button>
-        <p>calendar</p>
-        <p>{cliant.name} - time block</p>
-      </>
-    </Drawer>
+    <Paper elevation={3} sx={{ height: "700px", p: "10px" }}>
+      <button onClick={() => setSideAreaContent(null)}>
+        <i className="fa-solid fa-xmark fa-lg"></i>
+      </button>
+      <p>calendar</p>
+      <p>{cliant.name} - time block</p>
+    </Paper>
   );
 }
