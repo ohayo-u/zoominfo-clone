@@ -42,11 +42,21 @@ export function OverView({ setSideAreaContent, cliant }) {
           </Button>
         </Box>
         <Divider />
-        <Stack>
+        <Stack sx={{ m: "10px" }}>
           <Typography variant="p">Email addresses</Typography>
-          <Typography variant="p">{cliant.email}</Typography>
+          <Typography variant="p">
+            Business
+            <Typography variant="span" color="primary" sx={{ ml: "8px" }}>
+              {cliant.email}
+            </Typography>
+          </Typography>
           <Typography variant="p">Phone numbers</Typography>
-          <Typography variant="p">{cliant.phoneNumber}</Typography>
+          <Typography variant="p">
+            Direct
+            <Typography variant="span" color="primary" sx={{ ml: "8px" }}>
+              {cliant.phoneNumber}
+            </Typography>
+          </Typography>
         </Stack>
       </>
     </Paper>
