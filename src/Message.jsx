@@ -1,5 +1,5 @@
 import zoominfoAvatar from "./images/zoominfoAvatar.png";
-import { Avatar, Divider, Stack } from "@mui/material";
+import { Avatar, Divider } from "@mui/material";
 import { UserAvatar } from "./UserAvatar";
 
 export function Message({ message, messages }) {

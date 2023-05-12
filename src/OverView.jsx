@@ -1,20 +1,53 @@
-import { Paper } from "@mui/material";
+import {
+  Button,
+  Stack,
+  IconButton,
+  Paper,
+  Typography,
+  Box,
+  Divider,
+} from "@mui/material";
+import LaunchIcon from "@mui/icons-material/Launch";
+import CloseIcon from "@mui/icons-material/Close";
 
 export function OverView({ setSideAreaContent, cliant }) {
   return (
     <Paper elevation={3} sx={{ height: "700px", p: "10px" }}>
       <>
-        <div className="side-area-header">
-          <h2>Overview</h2>
-          <button onClick={() => setSideAreaContent(null)}>
-            <i className="fa-solid fa-xmark fa-lg"></i>
-          </button>
-        </div>
-
-        <h3>{cliant.name}</h3>
-        <p>{cliant.position}</p>
-        <p>Email addresses: {cliant.email}</p>
-        <p>Phone numbers: {cliant.phoneNumber}</p>
+        <Stack direction="row" justifyContent="space-between">
+          <Typography variant="h6" sx={{ fontWeight: "bold" }}>
+            Overview
+          </Typography>
+          <Box>
+            <IconButton>
+              <LaunchIcon />
+            </IconButton>
+            <IconButton onClick={() => setSideAreaContent(null)}>
+              <CloseIcon />
+            </IconButton>
+          </Box>
+        </Stack>
+        <Stack sx={{ m: "20px" }}>
+          <Typography variant="h6" color="primary">
+            {cliant.name}
+          </Typography>
+          <Typography variant="p">{cliant.position}</Typography>
+        </Stack>
+        <Box>
+          <Button variant="contained" sx={{ borderRadius: "20px" }}>
+            Add to Salesflow
+          </Button>
+          <Button variant="outlined" sx={{ borderRadius: "20px", m: "10px" }}>
+            Export
+          </Button>
+        </Box>
+        <Divider />
+        <Stack>
+          <Typography variant="p">Email addresses</Typography>
+          <Typography variant="p">{cliant.email}</Typography>
+          <Typography variant="p">Phone numbers</Typography>
+          <Typography variant="p">{cliant.phoneNumber}</Typography>
+        </Stack>
       </>
     </Paper>
   );

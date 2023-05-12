@@ -33,7 +33,7 @@ function App() {
       },
     },
     typography: {
-      fontFamily: ["Sans Serif"].join(","),
+      fontFamily: ["sans-serif"].join(","),
     },
     palette: {
       primary: {
