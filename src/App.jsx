@@ -227,17 +227,17 @@ function App() {
   }, [messages.length]);
 
   return (
-    <main>
+    <main style={{ height: "100dvh", display: "flex", flexDirection: "column" }}>
       <ThemeProvider theme={theme}>
         <CssBaseline />
         <Header />
         <Paper
           elevation={3}
           sx={{
-            width: "1400px",
-            height: "700px",
-            m: "10px auto",
-            pb: "100px",
+            // width: "1400px",
+            // height: "700px",
+            flexGrow: 1,
+            m: 2,
             position: "relative",
             display: "flex",
             justifyContent: "center",
